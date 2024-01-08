@@ -3,7 +3,6 @@ async function getPosts() {
   let info = await axios.get(
     "https://tarmeezacademy.com/api/v1/posts?limit=80"
   );
-  console.log(info.data.data);
   document.getElementById("post").innerHTML = "";
   let posts = info.data.data;
   const postTitle = "";
@@ -36,7 +35,7 @@ async function getPosts() {
     document.getElementById(cuurentPostTag).innerHTML = "";
     for (tags of response.tags) {
       let tagContent = `
-       <button class="btn btn-sm rounded-5 btn-secondary">
+      <button class="btn btn-sm rounded-5 btn-secondary">
                 ${tags.name}
             </button>
       `;
@@ -52,16 +51,22 @@ async function loginBtnClicked() {
     username: username,
     password: password,
   };
-  let response = await axios.post(url, params);
-  localStorage.setItem("token", response.data.token);
+  await axios.post(url, params).then((response) => {
+    localStorage.setItem("token", response.data.token);
   localStorage.setItem("user", JSON.stringify(response.data.user));
   const modal = document.getElementById("login-modal");
   const modalInstance = bootstrap.Modal.getInstance(modal);
   modalInstance.hide();
-  showAlert("Logged In");
+    showAlert("Logged In successfuly", "success");
+    addButton();
   setUi();
+  }).catch((error) => {
+        const errorMessage = error.response.data.message;
+        showAlert(errorMessage,"danger")
+  })
+  
 }
-function showAlert(message) {
+function showAlert(message,type) {
   const alertPlaceholder = document.getElementById("liveAlertPlaceholder");
   const appendAlert = (message, type) => {
     const wrapper = document.createElement("div");
@@ -74,7 +79,7 @@ function showAlert(message) {
 
     alertPlaceholder.append(wrapper);
   };
-  appendAlert(` ${message} successfuly `, "success");
+  appendAlert(` ${message}`, type);
 }
 function setUi() {
   const token = localStorage.getItem("token");
@@ -91,7 +96,8 @@ function setUi() {
 function logout() {
   localStorage.removeItem("token");
   localStorage.removeItem("user");
-  showAlert("Logged out");
+  showAlert("Logged out successfuly", "success");
+  addButton();
   setUi();
 }
 async function registration() {
@@ -104,14 +110,30 @@ async function registration() {
     "password": password,
     "name": name,
   };
-  let response = await axios.post(url, params);
-  localStorage.setItem("token", response.data.token);
+  axios.post(url, params)
+    .then((response) => {
+      localStorage.setItem("token", response.data.token);
   localStorage.setItem("user", JSON.stringify(response.data.user));
   const modal = document.getElementById("register-modal");
   const modalInstance = bootstrap.Modal.getInstance(modal);
   modalInstance.hide();
-  showAlert("Registration done");
-  setUi();
+      showAlert("Registration done successfuly", "success");
+      addButton();
+      setUi();
+  }).catch((error) => {
+    const errorMessage = error.response.data.message;
+    showAlert(errorMessage,"danger");
+  })
+  
 }
+function addButton() {
+  if (localStorage.getItem("token")) {
+    document.getElementById("addButton").style.display = "block";
+  }
+  else {
+    document.getElementById("addButton").style.display = "none";
+  }
+}
+addButton();
 getPosts();
 setUi();
