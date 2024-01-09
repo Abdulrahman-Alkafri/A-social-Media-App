@@ -136,7 +136,7 @@ function createNewPostClicked() {
             }
       axios.post(url, formData, {
           headers: header
-      }).then((response) => {
+      }).then(() => {
           closeModel("create-post-modal")
           showAlert("Post Created Successfully", "success");
           getPosts();
