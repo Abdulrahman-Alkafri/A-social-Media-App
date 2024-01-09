@@ -137,6 +137,7 @@ function createNewPostClicked() {
           formData.append("title", title);
           formData.append("image", image);
       const header = {
+              "Content-Type":multipart/form-data,
               "authorization":`Bearer ${token}`,
             }
       axios.post(url, formData, {
