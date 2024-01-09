@@ -5,7 +5,7 @@ async function getPosts() {
   );
   document.getElementById("post").innerHTML = "";
   let posts = info.data.data;
-  const postTitle = "";
+  let postTitle = "";
   if (posts.title != null) postTitle = posts.title;
   for (let response of posts) {
     let content = `<div class="card shadow rounded my-3">
@@ -58,13 +58,43 @@ async function loginBtnClicked() {
   const modalInstance = bootstrap.Modal.getInstance(modal);
   modalInstance.hide();
     showAlert("Logged In successfuly", "success");
-    addButton();
   setUi();
   }).catch((error) => {
         const errorMessage = error.response.data.message;
         showAlert(errorMessage,"danger")
   })
   
+}
+async function registration() {
+  const username = document.getElementById("register-username-input").value;
+  const password = document.getElementById("register-password-input").value;
+  const name = document.getElementById("register-name-input").value;
+  const url = `${baseUrl}/register`;
+  const params = {
+    "username": username,
+    "password": password,
+    "name": name,
+  };
+  axios.post(url, params)
+    .then((response) => {
+      localStorage.setItem("token", response.data.token);
+  localStorage.setItem("user", JSON.stringify(response.data.user));
+  const modal = document.getElementById("register-modal");
+  const modalInstance = bootstrap.Modal.getInstance(modal);
+  modalInstance.hide();
+      showAlert("Registration done successfuly", "success");
+      setUi();
+  }).catch((error) => {
+    const errorMessage = error.response.data.message;
+    showAlert(errorMessage,"danger");
+  })
+  
+}
+function logout() {
+  localStorage.removeItem("token");
+  localStorage.removeItem("user");
+  showAlert("Logged out successfuly", "success");
+  setUi();
 }
 function showAlert(message,type) {
   const alertPlaceholder = document.getElementById("liveAlertPlaceholder");
@@ -85,55 +115,36 @@ function setUi() {
   const token = localStorage.getItem("token");
   const logedInDiv = document.getElementById("logged-in");
   const loggedOut = document.getElementById("logged-out");
+  const addBtn = document.getElementById("add-btn");
   if (token == null) {
     logedInDiv.style.setProperty("display", "flex", "important");
     loggedOut.style.setProperty("display", "none", "important");
+    addBtn.style.setProperty("display", "none", "important");
   } else {
     logedInDiv.style.setProperty("display", "none", "important");
     loggedOut.style.setProperty("display", "flex", "important");
+    addBtn.style.setProperty("display", "block", "important");
   }
 }
-function logout() {
-  localStorage.removeItem("token");
-  localStorage.removeItem("user");
-  showAlert("Logged out successfuly", "success");
-  addButton();
-  setUi();
-}
-async function registration() {
-  const username = document.getElementById("register-username-input").value;
-  const password = document.getElementById("register-password-input").value;
-  const name = document.getElementById("register-name-input").value;
-  const url = `${baseUrl}/register`;
-  const params = {
-    "username": username,
-    "password": password,
-    "name": name,
-  };
-  axios.post(url, params)
-    .then((response) => {
-      localStorage.setItem("token", response.data.token);
-  localStorage.setItem("user", JSON.stringify(response.data.user));
-  const modal = document.getElementById("register-modal");
+function createNewPostClicked() {
+    const body = document.getElementById("post-body-input").value;
+    const title = document.getElementById("post-title-input").value;
+  const url = `${baseUrl}/posts`;
+  const token = localStorage.getItem("token");
+    const params = {
+        "body": body,
+        "title": title,
+      };
+    const header = {
+        "authorization":`Bearer ${token}`,
+      }
+  axios.post(url, params, {
+    headers: header
+  });
+  const modal = document.getElementById("create-post-modal");
   const modalInstance = bootstrap.Modal.getInstance(modal);
   modalInstance.hide();
-      showAlert("Registration done successfuly", "success");
-      addButton();
-      setUi();
-  }).catch((error) => {
-    const errorMessage = error.response.data.message;
-    showAlert(errorMessage,"danger");
-  })
-  
+    showAlert("Post Created Successfully", "success");
 }
-function addButton() {
-  if (localStorage.getItem("token")) {
-    document.getElementById("addButton").style.display = "block";
-  }
-  else {
-    document.getElementById("addButton").style.display = "none";
-  }
-}
-addButton();
 getPosts();
 setUi();
