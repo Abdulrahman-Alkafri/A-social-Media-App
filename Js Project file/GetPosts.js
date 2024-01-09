@@ -48,22 +48,19 @@ async function loginBtnClicked() {
   let password = document.getElementById("password-input").value;
   const url = `${baseUrl}/login`;
   const params = {
-    username: username,
-    password: password,
+    "username": username,
+    "password": password,
   };
   axios.post(url, params).then((response) => {
     localStorage.setItem("token", response.data.token);
   localStorage.setItem("user", JSON.stringify(response.data.user));
-  const modal = document.getElementById("login-modal");
-  const modalInstance = bootstrap.Modal.getInstance(modal);
-  modalInstance.hide();
+    closeModel("login-modal");
     showAlert("Logged In successfuly", "success");
   setUi();
   }).catch((error) => {
         const errorMessage = error.response.data.message;
         showAlert(errorMessage,"danger")
   })
-  
 }
 async function registration() {
   const username = document.getElementById("register-username-input").value;
@@ -78,17 +75,14 @@ async function registration() {
   axios.post(url, params)
     .then((response) => {
       localStorage.setItem("token", response.data.token);
-  localStorage.setItem("user", JSON.stringify(response.data.user));
-  const modal = document.getElementById("register-modal");
-  const modalInstance = bootstrap.Modal.getInstance(modal);
-  modalInstance.hide();
+      localStorage.setItem("user", JSON.stringify(response.data.user));
+      closeModel("register-modal");
       showAlert("Registration done successfuly", "success");
       setUi();
   }).catch((error) => {
     const errorMessage = error.response.data.message;
     showAlert(errorMessage,"danger");
   })
-  
 }
 function logout() {
   localStorage.removeItem("token");
@@ -142,17 +136,19 @@ function createNewPostClicked() {
             }
       axios.post(url, formData, {
           headers: header
-        }).then((response) => {
-      const modal = document.getElementById("create-post-modal");
-      const modalInstance = bootstrap.Modal.getInstance(modal);
-        modalInstance.hide();
+      }).then((response) => {
+          closeModel("create-post-modal")
           showAlert("Post Created Successfully", "success");
           getPosts();
         }).catch((error) => {
           const errorMessage = error.response.data.message;
             showAlert(errorMessage,"danger")
-        })
-        
-  }
+        }) 
+}
+function closeModel(id) {
+  const modal = document.getElementById(id);
+  const modalInstance = bootstrap.Modal.getInstance(modal);
+  modalInstance.hide();
+}
 getPosts();
 setUi();
