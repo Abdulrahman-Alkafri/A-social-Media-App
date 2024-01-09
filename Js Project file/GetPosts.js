@@ -51,7 +51,7 @@ async function loginBtnClicked() {
     username: username,
     password: password,
   };
-  await axios.post(url, params).then((response) => {
+  axios.post(url, params).then((response) => {
     localStorage.setItem("token", response.data.token);
   localStorage.setItem("user", JSON.stringify(response.data.user));
   const modal = document.getElementById("login-modal");
@@ -127,24 +127,31 @@ function setUi() {
   }
 }
 function createNewPostClicked() {
-    const body = document.getElementById("post-body-input").value;
-    const title = document.getElementById("post-title-input").value;
-  const url = `${baseUrl}/posts`;
-  const token = localStorage.getItem("token");
-    const params = {
-        "body": body,
-        "title": title,
-      };
-    const header = {
-        "authorization":`Bearer ${token}`,
-      }
-  axios.post(url, params, {
-    headers: header
-  });
-  const modal = document.getElementById("create-post-modal");
-  const modalInstance = bootstrap.Modal.getInstance(modal);
-  modalInstance.hide();
-    showAlert("Post Created Successfully", "success");
-}
+      const body = document.getElementById("post-body-input").value;
+      const title = document.getElementById("post-title-input").value;
+      const image = document.getElementById("post-image-input").files[0];
+      const url = `${baseUrl}/posts`;
+      const token = localStorage.getItem("token");
+      let formData = new FormData();
+          formData.append("body", body);
+          formData.append("title", title);
+          formData.append("image", image);
+      const header = {
+              "authorization":`Bearer ${token}`,
+            }
+      axios.post(url, formData, {
+          headers: header
+        }).then((response) => {
+      const modal = document.getElementById("create-post-modal");
+      const modalInstance = bootstrap.Modal.getInstance(modal);
+        modalInstance.hide();
+          showAlert("Post Created Successfully", "success");
+          getPosts();
+        }).catch((error) => {
+          const errorMessage = error.response.data.message;
+            showAlert(errorMessage,"danger")
+        })
+        
+  }
 getPosts();
 setUi();
