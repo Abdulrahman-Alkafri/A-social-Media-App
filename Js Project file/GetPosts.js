@@ -129,7 +129,7 @@ function createNewPostClicked() {
       let formData = new FormData();
           formData.append("body", body);
           formData.append("title", title);
-          formData.append("image", image || "");
+          formData.append("image", image);
       const header = {
               "Content-Type":"multipart/form-data",
               "authorization":`Bearer ${token}`,
