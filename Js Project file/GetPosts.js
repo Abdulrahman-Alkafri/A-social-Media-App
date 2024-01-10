@@ -15,9 +15,7 @@ async function getPosts(page = 1) {
     const info = await axios.get(`https://tarmeezacademy.com/api/v1/posts?limit=150&page=${page}`);
     lastPage = info.data.meta.last_page;
     let posts = info.data.data;
-   
     let postTitle = "";
-   
     if (posts.title != null) postTitle = posts.title;
     for (let response of posts) {
       let content = `<div class="card shadow rounded my-3">
@@ -56,7 +54,7 @@ async function getPosts(page = 1) {
     }
     lastPage = info.data.meta.last_page;
   } catch (error) {
-    console.error("Error fetching posts:", error);
+    showAlert("Error fetching posts:" + error , "danger")
   }
   };
 async function loginBtnClicked() {
