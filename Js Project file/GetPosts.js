@@ -1,14 +1,26 @@
 const baseUrl = "https://tarmeezacademy.com/api/v1";
-async function getPosts() {
-  let info = await axios.get(
-    "https://tarmeezacademy.com/api/v1/posts?limit=80"
-  );
-  document.getElementById("post").innerHTML = "";
-  let posts = info.data.data;
-  let postTitle = "";
-  if (posts.title != null) postTitle = posts.title;
-  for (let response of posts) {
-    let content = `<div class="card shadow rounded my-3">
+let currentPage = 1
+let lastPage = null;
+// pagination
+window.addEventListener("scroll", () => {
+  const endOfPage = innerHeight + scrollY >= document.body.offsetHeight;
+  if (endOfPage && currentPage < lastPage) {
+    currentPage++;
+    getPosts(currentPage);
+  }
+})
+// pagination
+async function getPosts(page = 1) {
+  try {
+    const info = await axios.get(`https://tarmeezacademy.com/api/v1/posts?limit=150&page=${page}`);
+    lastPage = info.data.meta.last_page;
+    let posts = info.data.data;
+   
+    let postTitle = "";
+   
+    if (posts.title != null) postTitle = posts.title;
+    for (let response of posts) {
+      let content = `<div class="card shadow rounded my-3">
             <div class="card-header">
                 <img class="rounded-circle border border-3" src="${response.author.profile_image}" alt=""
                     style="height: 40px; width: 40px;">
@@ -30,19 +42,23 @@ async function getPosts() {
                 </span>
             </div>
         </div>`;
-    document.getElementById("post").innerHTML += content;
-    let cuurentPostTag = `post-tags-${response.id}`;
-    document.getElementById(cuurentPostTag).innerHTML = "";
-    for (tags of response.tags) {
-      let tagContent = `
+      document.getElementById("post").innerHTML += content;
+      let cuurentPostTag = `post-tags-${response.id}`;
+      document.getElementById(cuurentPostTag).innerHTML = "";
+      for (tags of response.tags) {
+        let tagContent = `
       <button class="btn btn-sm rounded-5 btn-secondary">
                 ${tags.name}
             </button>
       `;
-      document.getElementById(cuurentPostTag) += tagContent;
+        document.getElementById(cuurentPostTag) += tagContent;
+      }
     }
+    lastPage = info.data.meta.last_page;
+  } catch (error) {
+    console.error("Error fetching posts:", error);
   }
-}
+  };
 async function loginBtnClicked() {
   let username = document.getElementById("username-input").value;
   let password = document.getElementById("password-input").value;
@@ -66,13 +82,15 @@ async function registration() {
   const username = document.getElementById("register-username-input").value;
   const password = document.getElementById("register-password-input").value;
   const name = document.getElementById("register-name-input").value;
+  const image = document.getElementById("register-image-input").files[0];
   const url = `${baseUrl}/register`;
-  const params = {
-    "username": username,
-    "password": password,
-    "name": name,
-  };
-  axios.post(url, params)
+  let formData = new FormData();
+  formData.append("username", username);
+  formData.append("password", password);
+  formData.append("name", name);
+  formData.append("image", image);
+  
+  axios.post(url, formData)
     .then((response) => {
       localStorage.setItem("token", response.data.token);
       localStorage.setItem("user", JSON.stringify(response.data.user));
@@ -118,6 +136,9 @@ function setUi() {
     logedInDiv.style.setProperty("display", "none", "important");
     loggedOut.style.setProperty("display", "flex", "important");
     addBtn.style.setProperty("display", "block", "important");
+    const user = getCurrentUser();
+    document.getElementById("nav-username").innerHTML = user.username;
+    document.getElementById("nav-img").src = user.profile_image;
   }
 }
 function createNewPostClicked() {
@@ -150,5 +171,13 @@ function closeModel(id) {
   const modalInstance = bootstrap.Modal.getInstance(modal);
   modalInstance.hide();
 }
-getPosts();
+function getCurrentUser() {
+  let user = null;
+  const LocalStorageUser = localStorage.getItem("user");
+  if (LocalStorageUser != null) {
+    user = JSON.parse(LocalStorageUser);
+  }
+  return user;
+}
 setUi();
+getPosts();
