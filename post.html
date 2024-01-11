@@ -17,18 +17,9 @@
             crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
         <!-- // import  script and style // -->
-        <style>
-            #btn-back-to-top {
-                position: fixed;
-                bottom: 20%;
-                right: 2%;
-                display: none;
-            }
-        </style>
     </head>
 
     <body style="background-color: #f0ecff;">
-
         <!-- modals -->
         <!-- login modal -->
         <div class="modal fade" id="login-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -96,57 +87,10 @@
             </div>
         </div>
         <!-- // register modal // -->
-        <!-- add post modal -->
-        <div class="modal fade" id="create-post-modal" tabindex="-1" aria-labelledby="exampleModalLabel"
-            aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="exampleModalLabel">Create A New Post</h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <form>
-                            <div class="mb-3">
-                                <label for="recipient-name" class="col-form-label">Title</label>
-                                <input type="text" class="form-control" id="post-title-input">
-                            </div>
-                            <div class="mb-3">
-                                <textarea id="post-body-input"
-                                    style="width: 100%; height: 100px; resize:none;"></textarea>
-                            </div>
-                            <div class="mb-3">
-                                <label for="recipient-name" class="col-form-label">Title</label>
-                                <input type="file" class="form-control" id="post-image-input">
-                            </div>
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary" onclick="createNewPostClicked()">Create
-                            Post</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- // add post modal // -->
         <!-- // modals // -->
         <!-- =================alerts=================== -->
         <div id="liveAlertPlaceholder" style="position: fixed; bottom: 0; right: 0; z-index: 9999; width: 35%;"></div>
         <!-- ============= /// alerts /// ============= -->
-        <!-- add button -->
-        <button type="button" class="btn btn-primary btn-floating btn-lg rounded-circle"
-            style="width:55px; height: 55px; font-size: 30px; line-height: 0;" id="btn-back-to-top">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-up"
-                viewBox="0 0 16 16">
-                <path fill-rule="evenodd"
-                    d="M8 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L7.5 2.707V14.5a.5.5 0 0 0 .5.5" />
-            </svg>
-        </button>
-        <button class="btn bg-primary" style="position: fixed; border-radius: 100px; bottom: 5%; right: 2%; width: 55px; height: 55px;font-size: 25px;    z-index: 99;
-        line-height: 0; color: white; text-align: center;" data-bs-toggle="modal" data-bs-target="#create-post-modal"
-            id="add-btn">+</button>
-        <!-- add button -->
         <!-- NAVIGATION BAR -->
         <div class="container">
             <div class="d-flex justify-content-center">
@@ -189,22 +133,18 @@
             </div>
         </div>
         <!-- // NAVIGATION BAR //-->
-        <!-- MAIN CONTENT  -->
         <div class="container">
-            <!-- POSTS -->
-            <div class="d-flex justify-content-center mt-5">
+            <div class="row d-flex justify-content-center mt-5">
                 <div class="col-9">
-                    <div id="post" style="cursor: pointer;">
-                    </div>
+                    <h1>
+                        <span>yarob's</span>
+                        post
+                    </h1>
                 </div>
             </div>
-            <!-- // POSTS // -->
         </div>
-        <!-- // MAIN CONTENT // -->
-
-        <script src="./Js Project file/index.js"></script>
-        <script src="./Js Project file/home.js"></script>
 
     </body>
+    <script src="./Js Project file/index.js"></script>
 
 </html>
