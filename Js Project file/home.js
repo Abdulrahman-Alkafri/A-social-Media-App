@@ -10,20 +10,20 @@ window.addEventListener("scroll", () => {
 })
 // pagination
 async function getPosts(page = 1) {
-  try {
-    const info = await axios.get(`https://tarmeezacademy.com/api/v1/posts?limit=5&page=${page}`);
+try {
+    const info = await axios.get(`https://tarmeezacademy.com/api/v1/posts?limit=80&page=${page}`);
     lastPage = info.data.meta.last_page;
     let posts = info.data.data;
     let postTitle = "";
     if (posts.title != null) postTitle = posts.title;
     for (let response of posts) {
-      let content = `<div class="card shadow rounded my-3">
+        let content = `<div class="card shadow rounded my-3">
             <div class="card-header">
                 <img class="rounded-circle border border-3" src="${response.author.profile_image}" alt=""
                     style="height: 40px; width: 40px;">
                 <b>${response.author.username}</b>
             </div>
-            <div class="card-body" onclick="postClicked()">
+            <div class="card-body" onclick="postClicked(${response.id})">
                 <img src="${response.image}" alt="" style="width: 100%;">
                 <h6 style="color: #777;">${response.created_at}</h6>
                 <h5>${postTitle}</h5>
@@ -38,24 +38,24 @@ async function getPosts(page = 1) {
                 <span id="post-tags-${response.id}"></span>
                 </span>
             </div>
-        </div>`;
-      document.getElementById("post").innerHTML += content;
-      let cuurentPostTag = `post-tags-${response.id}`;
-      document.getElementById(cuurentPostTag).innerHTML = "";
-      for (tags of response.tags) {
+    </div>`;
+    document.getElementById("post").innerHTML += content;
+    let cuurentPostTag = `post-tags-${response.id}`;
+    document.getElementById(cuurentPostTag).innerHTML = "";
+    for (tags of response.tags) {
         let tagContent = `
-      <button class="btn btn-sm rounded-5 btn-secondary">
+    <button class="btn btn-sm rounded-5 btn-secondary">
                 ${tags.name}
             </button>
-      `;
+    `;
         document.getElementById(cuurentPostTag) += tagContent;
-      }
+    }
     }
     lastPage = info.data.meta.last_page;
   } catch (error) {
     showAlert("Error fetching posts:" + error , "danger")
   }
-};
+}
 function createNewPostClicked() {
   const body = document.getElementById("post-body-input").value;
   const title = document.getElementById("post-title-input").value;
@@ -112,8 +112,8 @@ function scrollToTop() {
   }
 }
 // scroll to top button 
-function postClicked() {
-    location.href = "post.html";
+function postClicked(id) {
+    location.href = `post.html?postId=${id}`;
 }
 getPosts();
 scrollToTop();
