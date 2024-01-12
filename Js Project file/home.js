@@ -23,7 +23,7 @@ try {
                     style="height: 40px; width: 40px;">
                 <b>${response.author.username}</b>
             </div>
-            <div class="card-body" onclick="postClicked(${response.id})">
+            <div class="card-body" style="cursor:pointer;" onclick="postClicked(${response.id})">
                 <img src="${response.image}" alt="" style="width: 100%;">
                 <h6 style="color: #777;">${response.created_at}</h6>
                 <h5>${postTitle}</h5>
