@@ -44,9 +44,35 @@ function showPost(id) {
             <div id = "comments">
             ${comments_content}
             </div>
-           
+          <div class="mb-3 d-flex">
+            <input type="email" class="form-control mx-1" id="Comment-input" placeholder="Enter Your Comment">
+            <button type="button" class="btn btn-outline-primary mx-1" onclick="createNewComment()">Add</button>
+            </div>
     </div>`;
     document.getElementById("post").innerHTML = content;
   });
+}
+function createNewComment() {
+  let commentField = document.getElementById("Comment-input").value;
+  let Url = `${baseUrl}/posts/${id}/comments`;
+  let token = localStorage.getItem("token");
+  let params = {
+    body: commentField,
+  };
+  const header = {
+    authorization: `Bearer ${token}`,
+  };
+  axios
+    .post(Url, params, {
+      headers: header,
+    })
+    .then(() => {
+      showPost(id);
+      showAlert("Comment Was Added Successfuly", "success");
+    })
+    .catch((error) => {
+      const errorMessage = error.response.data.message;
+      showAlert(errorMessage, "danger");
+    });
 }
 showPost(id);
