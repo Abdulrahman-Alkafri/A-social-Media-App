@@ -75,9 +75,10 @@ function createNewPostClicked() {
       headers: header,
     })
     .then(() => {
-      closeModel("create-post-modal");
+        closeModel("create-post-modal");
+        getPosts(1);
       showAlert("Post Created Successfully", "success");
-      getPosts(1);
+      
     })
     .catch((error) => {
       const errorMessage = error.response.data.message;
