@@ -9,19 +9,26 @@ window.addEventListener("scroll", () => {
   }
 })
 // pagination
-async function getPosts(page = 1) {
+async function getPosts(page =1) {
 try {
     const info = await axios.get(`https://tarmeezacademy.com/api/v1/posts?limit=80&page=${page}`);
     lastPage = info.data.meta.last_page;
     let posts = info.data.data;
     let postTitle = "";
     if (posts.title != null) postTitle = posts.title;
-    for (let response of posts) {
+  for (let response of posts) {
+    let user = getCurrentUser();
+    let isItMyPost = user != null && response.author.id == user.id;
+    let editBtn = "";
+    if (isItMyPost) {
+      editBtn = `<button type="button" class="btn btn-outline-secondary float-end" onclick="editPost('${encodeURIComponent(JSON.stringify(response))}')">Edit</button>`
+    }
         let content = `<div class="card shadow rounded my-3">
             <div class="card-header">
                 <img class="rounded-circle border border-3" src="${response.author.profile_image}" alt=""
                     style="height: 40px; width: 40px;">
                 <b>${response.author.username}</b>
+                ${editBtn}
             </div>
             <div class="card-body" style="cursor:pointer;" onclick="postClicked(${response.id})">
                 <img src="${response.image}" alt="" style="width: 100%;">
@@ -57,33 +64,56 @@ try {
   }
 }
 function createNewPostClicked() {
+  let postId = document.getElementById("is-it-edit").value;
+  let isCreate = postId == null || postId == "";
   const body = document.getElementById("post-body-input").value;
   const title = document.getElementById("post-title-input").value;
   const image = document.getElementById("post-image-input").files[0];
-  const url = `${baseUrl}/posts`;
   const token = localStorage.getItem("token");
   let formData = new FormData();
   formData.append("body", body);
   formData.append("title", title);
   formData.append("image", image);
-  const header = {
-    "Content-Type": "multipart/form-data",
-    authorization: `Bearer ${token}`,
-  };
-  axios
-    .post(url, formData, {
-      headers: header,
-    })
-    .then(() => {
+  if (isCreate) {
+    const url = `${baseUrl}/posts`;
+    const header = {
+      "Content-Type": "multipart/form-data",
+      authorization: `Bearer ${token}`,
+    };
+    axios
+      .post(url, formData, {
+        headers: header,
+      })
+      .then(() => {
         closeModel("create-post-modal");
-        getPosts(1);
-      showAlert("Post Created Successfully", "success");
-      
-    })
-    .catch((error) => {
-      const errorMessage = error.response.data.message;
-      showAlert(errorMessage, "danger");
-    });
+        showAlert("Post Created Successfully", "success");
+        location.reload(true);
+      })
+      .catch((error) => {
+        const errorMessage = error.response.data.message;
+        showAlert(errorMessage, "danger");
+      });
+  }else {
+    formData.append("_method","put")
+      const url = `${baseUrl}/posts/${postId}`;
+      const header = {
+        "Content-Type": "multipart/form-data",
+        authorization: `Bearer ${token}`,
+      };
+      axios
+        .post(url, formData, {
+          headers: header,
+        })
+        .then(() => {
+          closeModel("create-post-modal");
+          showAlert("Post Edited Successfully", "success");
+          location.reload(true);
+        })
+        .catch((error) => {
+          const errorMessage = error.response.data.message;
+          showAlert(errorMessage, "danger");
+        });
+  }
 }
 function scrollToTop() {
   // scroll to top button 
@@ -116,5 +146,26 @@ function scrollToTop() {
 function postClicked(id) {
     location.href = `post.html?postId=${id}`;
 }
-getPosts();
+function editPost(PostObject) {
+  let post = JSON.parse(decodeURIComponent(PostObject));
+  document.getElementById("post-modal-submit-btn").innerHTML = "Update";
+  document.getElementById("is-it-edit").value = post.id;
+  document.getElementById("post-modal-title").innerHTML = "Edit Post";
+  document.getElementById("post-title-input").value = post.title;
+  document.getElementById("post-body-input").value = post.body;
+
+
+  let PostModal = new bootstrap.Modal(document.getElementById("create-post-modal"),{});
+  PostModal.toggle();
+}
+function addBtnClicked() {
+   document.getElementById("post-modal-submit-btn").innerHTML = "Create";
+  document.getElementById("is-it-edit").value ="";
+  document.getElementById("post-modal-title").innerHTML = "Create A New Post";
+  document.getElementById("post-title-input").value ="";
+  document.getElementById("post-body-input").value = "";
+  let PostModal = new bootstrap.Modal(document.getElementById("create-post-modal"),{});
+  PostModal.toggle();
+}
+getPosts(1);
 scrollToTop();

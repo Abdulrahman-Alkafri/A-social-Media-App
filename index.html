@@ -102,7 +102,7 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="exampleModalLabel">Create A New Post</h1>
+                        <h1 class="modal-title fs-5" id="post-modal-title">Create A New Post</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
@@ -110,6 +110,7 @@
                             <div class="mb-3">
                                 <label for="recipient-name" class="col-form-label">Title</label>
                                 <input type="text" class="form-control" id="post-title-input">
+                                <input type="hidden" id="is-it-edit" value="">
                             </div>
                             <div class="mb-3">
                                 <textarea id="post-body-input"
@@ -123,8 +124,8 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary" onclick="createNewPostClicked()">Create
-                            Post</button>
+                        <button type="button" id="post-modal-submit-btn" class="btn btn-primary"
+                            onclick="createNewPostClicked()">Create</button>
                     </div>
                 </div>
             </div>
@@ -136,7 +137,7 @@
         <!-- ============= /// alerts /// ============= -->
         <!-- add button -->
         <button type="button" class="btn btn-primary btn-floating btn-lg rounded-circle"
-            style="width:55px; height: 55px; font-size: 30px; line-height: 0;" id="btn-back-to-top">
+            style="width:55px; height: 55px; font-size: 30px; line-height: 0; z-index: 9999;" id="btn-back-to-top">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-up"
                 viewBox="0 0 16 16">
                 <path fill-rule="evenodd"
@@ -144,8 +145,7 @@
             </svg>
         </button>
         <button class="btn bg-primary" style="position: fixed; border-radius: 100px; bottom: 5%; right: 2%; width: 55px; height: 55px;font-size: 25px;    z-index: 99;
-        line-height: 0; color: white; text-align: center;" data-bs-toggle="modal" data-bs-target="#create-post-modal"
-            id="add-btn">+</button>
+        line-height: 0; color: white; text-align: center;" onclick="addBtnClicked()" id="add-btn">+</button>
         <!-- add button -->
         <!-- NAVIGATION BAR -->
         <div class="container">
