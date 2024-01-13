@@ -11,7 +11,7 @@ function showPost(id) {
     let comments_content = "";
     for (let comment of comments) {
       comments_content += ` 
-      <div class="p-3" style ="background-color: rgb(187,187,187)">
+      <div class="p-3" style ="background-color: rgb(199 212 255)">
             <div>
                 <img class="rounded-circle" style="width: 40px; height: 40px;" src="${comment.author.profile_image}" alt="">
                 <b>${comment.author.username}</b>
@@ -44,7 +44,7 @@ function showPost(id) {
             <div id = "comments">
             ${comments_content}
             </div>
-          <div class="mb-3 d-flex">
+          <div class="my-3 d-flex">
             <input type="email" class="form-control mx-1" id="Comment-input" placeholder="Enter Your Comment">
             <button type="button" class="btn btn-outline-primary mx-1" onclick="createNewComment()">Add</button>
             </div>
