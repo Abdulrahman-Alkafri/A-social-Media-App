@@ -5,7 +5,7 @@
         <meta charset="UTF-8">
         <meta name="description" content="Abdulrahman Alkafri Social Media App.">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>A-chat</title>
+        <title>profile</title>
         <!-- import script and style -->
         <!-- <script src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
         <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
@@ -17,18 +17,9 @@
             crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
         <!-- // import  script and style // -->
-        <style>
-            #btn-back-to-top {
-                position: fixed;
-                bottom: 20%;
-                right: 2%;
-                display: none;
-            }
-        </style>
     </head>
 
     <body style="background-color: #f0ecff;">
-
         <!-- modals -->
         <!-- login modal -->
         <div class="modal fade" id="login-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -152,14 +143,14 @@
         </div>
         <!-- // delete modal // -->
         <!-- // modals // -->
+        <!-- add button -->
+        <button class="btn bg-primary" style="position: fixed; border-radius: 100px; bottom: 5%; right: 2%; width: 55px; height: 55px;font-size: 25px;    z-index: 99;
+                line-height: 0; color: white; text-align: center;" onclick="addBtnClicked()" id="add-btn">+</button>
+        <!-- add button -->
         <!-- =================alerts=================== -->
         <div id="liveAlertPlaceholder" style="position: fixed; bottom: 0; right: 0; z-index: 9999; width: 40%;">
         </div>
         <!-- ============= /// alerts /// ============= -->
-        <!-- add button -->
-        <button class="btn bg-primary" style="position: fixed; border-radius: 100px; bottom: 5%; right: 2%; width: 55px; height: 55px;font-size: 25px;    z-index: 99;
-        line-height: 0; color: white; text-align: center;" onclick="addBtnClicked()" id="add-btn">+</button>
-        <!-- add button -->
         <!-- NAVIGATION BAR -->
         <div class="container">
             <div class="d-flex justify-content-center">
@@ -178,7 +169,7 @@
                                         <a class="nav-link active" aria-current="page" href="index.html"">Home</a>
                                     </li>
                                     <li class=" nav-item">
-                                            <a class="nav-link" href="profile.html">Profile</a>
+                                            <a class="nav-link" href="#">Profile</a>
                                     </li>
                                 </ul>
                                 <div class="d-flex w-100 justify-content-end" id="logged-in">
@@ -202,22 +193,40 @@
             </div>
         </div>
         <!-- // NAVIGATION BAR //-->
-        <!-- MAIN CONTENT  -->
         <div class="container">
             <!-- POSTS -->
             <div class="d-flex justify-content-center mt-5">
                 <div class="col-9">
-                    <div id="post">
+                    <div class="card mb-4">
+                        <div class="card-body ">
+                            <div class="row">
+                                <div class="col-2">
+                                    <img id="image-header" src="download.png" class="rounded-circle border border-2"
+                                        style="height: 120px; width: 120px;">
+                                </div>
+                                <div class="col-4 d-flex flex-column justify-content-evenly fw-bolder mx-2 mb-2"
+                                    style="font-size: 25px;">
+                                    <div>yarob</div>
+                                    <div>yarob99</div>
+                                    <div>123456789</div>
+                                </div>
+                                <div class="col-4 d-flex flex-column justify-content-evenly fw-light mb-2">
+                                    <div style="color: #777;" class="fw-lighter"><span
+                                            style="font-size: 50px;color: black;">0</span>
+                                        Posts</div>
+                                    <div style="color: #777;" class="fw-lighter"><span
+                                            style="font-size: 50px;color: black;">0</span>
+                                        Posts</div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-            <!-- // POSTS // -->
+
         </div>
         <!-- // MAIN CONTENT // -->
-
         <script src="./Js Project file/index.js"></script>
-        <script src="./Js Project file/home.js"></script>
-
     </body>
 
 </html>

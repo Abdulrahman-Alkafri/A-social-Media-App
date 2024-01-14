@@ -1,5 +1,5 @@
 let currentPage = 1
-let lastPage = 1;
+let lastPage = null;
 // pagination
 window.addEventListener("scroll", () => {
   const endOfPage = innerHeight + scrollY >= document.body.offsetHeight;
@@ -9,21 +9,23 @@ window.addEventListener("scroll", () => {
   }
 })
 // pagination
-async function getPosts(page =1) {
-try {
-    const info = await axios.get(`https://tarmeezacademy.com/api/v1/posts?limit=80&page=${page}`);
+function getPosts(page = 1) {
+  axios.get(`https://tarmeezacademy.com/api/v1/posts?limit=80&page=${page}`).then((info) => {
     lastPage = info.data.meta.last_page;
     let posts = info.data.data;
     let postTitle = "";
     if (posts.title != null) postTitle = posts.title;
-  for (let response of posts) {
-    let user = getCurrentUser();
-    let isItMyPost = user != null && response.author.id == user.id;
-    let editBtn = "";
-    if (isItMyPost) {
-      editBtn = `<button type="button" class="btn btn-outline-secondary float-end" onclick="editPost('${encodeURIComponent(JSON.stringify(response))}')">Edit</button>`
-    }
-        let content = `<div class="card shadow rounded my-3">
+    for (let response of posts) {
+      let user = getCurrentUser();
+      let isItMyPost = user != null && response.author.id == user.id;
+      let editBtn = "";
+      if (isItMyPost) {
+        editBtn = `
+      <button type="button" class="btn btn-outline-danger float-end mx-2" onclick="deletePost('${encodeURIComponent(JSON.stringify(response))}')">Delete</button>
+      <button type="button" class="btn btn-outline-secondary float-end" onclick="editPost('${encodeURIComponent(JSON.stringify(response))}')">Edit</button>
+      `
+      }
+      let content = `<div class="card shadow rounded my-3">
             <div class="card-header">
                 <img class="rounded-circle border border-3" src="${response.author.profile_image}" alt=""
                     style="height: 40px; width: 40px;">
@@ -46,22 +48,23 @@ try {
                 </span>
             </div>
     </div>`;
-    document.getElementById("post").innerHTML += content;
-    let cuurentPostTag = `post-tags-${response.id}`;
-    document.getElementById(cuurentPostTag).innerHTML = "";
-    for (tags of response.tags) {
+      document.getElementById("post").innerHTML += content;
+      let cuurentPostTag = `post-tags-${response.id}`;
+      document.getElementById(cuurentPostTag).innerHTML = "";
+      for (tags of response.tags) {
         let tagContent = `
     <button class="btn btn-sm rounded-5 btn-secondary">
                 ${tags.name}
             </button>
     `;
         document.getElementById(cuurentPostTag) += tagContent;
-    }
+      }
     }
     lastPage = info.data.meta.last_page;
-  } catch (error) {
-    showAlert("Error fetching posts:" + error , "danger")
-  }
+  }).catch((error) => {
+      const errorMessage = error.response.data.message;
+      showAlert(errorMessage, "danger");
+  });
 }
 function createNewPostClicked() {
   let postId = document.getElementById("is-it-edit").value;
@@ -87,7 +90,7 @@ function createNewPostClicked() {
       .then(() => {
         closeModel("create-post-modal");
         showAlert("Post Created Successfully", "success");
-        location.reload(true);
+        location.reload(true)
       })
       .catch((error) => {
         const errorMessage = error.response.data.message;
@@ -107,40 +110,14 @@ function createNewPostClicked() {
         .then(() => {
           closeModel("create-post-modal");
           showAlert("Post Edited Successfully", "success");
-          location.reload(true);
+          location.reload(true)
         })
         .catch((error) => {
           const errorMessage = error.response.data.message;
           showAlert(errorMessage, "danger");
         });
   }
-}
-function scrollToTop() {
-  // scroll to top button 
-  let mybutton = document.getElementById("btn-back-to-top");
-
-  // When the user scrolls down 20px from the top of the document, show the button
-  window.onscroll = function () {
-    scrollFunction();
-  };
-
-  function scrollFunction() {
-    if (
-      document.body.scrollTop > 20 ||
-      document.documentElement.scrollTop > 20
-    ) {
-      mybutton.style.display = "block";
-    } else {
-      mybutton.style.display = "none";
-    }
-  }
-  // When the user clicks on the button, scroll to the top of the document
-  mybutton.addEventListener("click", backToTop);
-
-  function backToTop() {
-    document.body.scrollTop = 0;
-    document.documentElement.scrollTop = 0;
-  }
+  
 }
 // scroll to top button 
 function postClicked(id) {
@@ -153,10 +130,32 @@ function editPost(PostObject) {
   document.getElementById("post-modal-title").innerHTML = "Edit Post";
   document.getElementById("post-title-input").value = post.title;
   document.getElementById("post-body-input").value = post.body;
-
-
   let PostModal = new bootstrap.Modal(document.getElementById("create-post-modal"),{});
   PostModal.toggle();
+}
+function deletePost(PostObject) {
+  let post = JSON.parse(decodeURIComponent(PostObject));
+  document.getElementById("post-delete-input-id").value = post.id
+  let PostModal = new bootstrap.Modal(document.getElementById("delete-post-modal"),{});
+  PostModal.toggle();
+}
+function confirmDelete() {
+  let postId = document.getElementById("post-delete-input-id").value;
+  const Url = `${baseUrl}/posts/${postId}`
+  const token = localStorage.getItem("token");
+  axios.delete(Url,{
+    headers: {
+      authorization: `Bearer ${token}`,
+    }
+  }).then(() => {
+    closeModel("delete-post-modal");
+    showAlert("Post Was Deleted Successfuly", "success");
+    location.reload(true)
+  }).catch((error) => {
+          const errorMessage = error.response.data.message;
+          showAlert(errorMessage, "danger");
+  })
+  
 }
 function addBtnClicked() {
    document.getElementById("post-modal-submit-btn").innerHTML = "Create";
@@ -168,4 +167,3 @@ function addBtnClicked() {
   PostModal.toggle();
 }
 getPosts(1);
-scrollToTop();
