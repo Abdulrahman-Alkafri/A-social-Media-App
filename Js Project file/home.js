@@ -21,8 +21,10 @@ function getPosts(page = 1) {
       let editBtn = "";
       if (isItMyPost) {
         editBtn = `
-      <button type="button" class="btn btn-outline-danger float-end mx-2" onclick="deletePost('${encodeURIComponent(JSON.stringify(response))}')">Delete</button>
-      <button type="button" class="btn btn-outline-secondary float-end" onclick="editPost('${encodeURIComponent(JSON.stringify(response))}')">Edit</button>
+     <div class="d-flex justify-content-end">
+      <button type="button" class="btn btn-outline-danger mx-2" onclick="deletePost('${encodeURIComponent(JSON.stringify(response))}')">Delete</button>
+      <button type="button" class="btn btn-outline-secondary" onclick="editPost('${encodeURIComponent(JSON.stringify(response))}')">Edit</button>
+    </div>
       `
       }
       let content = `<div class="card shadow rounded my-3">
