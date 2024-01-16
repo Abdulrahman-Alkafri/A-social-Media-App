@@ -109,28 +109,28 @@
                                         <a class="nav-link active" aria-current="page" href="index.html">Home</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link" href="profile.html">Profile</a>
+                                        <a class="nav-link" onclick="userProfile()" style="cursor: pointer;"">Profile</a>
                                     </li>
                                 </ul>
-                                <div class="d-flex w-100 justify-content-end" id="logged-in">
-                                    <button type="button" class="btn btn-outline-success mx-2" data-bs-toggle="modal"
-                                        id="login-btn" data-bs-target="#login-modal"
-                                        data-bs-whatever="@mdo">Login</button>
-                                    <button type="button" data-bs-toggle="modal" data-bs-target="#register-modal"
-                                        id="register-btn" class="btn btn-outline-success">Register</button>
-                                </div>
-                                <div class="d-flex w-100 justify-content-end align-items-center" id="logged-out">
-                                    <img id="nav-img" class="rounded-circle border border-3"
-                                        style="height: 40px; width: 40px;" src="" alt="">
-                                    <b id="nav-username" class="mx-1"></b>
-                                    <button type="button" onclick="logout()"
-                                        class="btn btn-outline-danger">Logout</button>
-                                </div>
+                                <div class=" d-flex w-100 justify-content-end" id="logged-in">
+                                            <button type="button" class="btn btn-outline-success mx-2"
+                                                data-bs-toggle="modal" id="login-btn" data-bs-target="#login-modal"
+                                                data-bs-whatever="@mdo">Login</button>
+                                            <button type="button" data-bs-toggle="modal"
+                                                data-bs-target="#register-modal" id="register-btn"
+                                                class="btn btn-outline-success">Register</button>
+                            </div>
+                            <div class="d-flex w-100 justify-content-end align-items-center" id="logged-out">
+                                <img id="nav-img" class="rounded-circle border border-3"
+                                    style="height: 40px; width: 40px;" src="" alt="">
+                                <b id="nav-username" class="mx-1"></b>
+                                <button type="button" onclick="logout()" class="btn btn-outline-danger">Logout</button>
                             </div>
                         </div>
-                    </nav>
                 </div>
+                </nav>
             </div>
+        </div>
         </div>
         <!-- // NAVIGATION BAR //-->
         <div class="container">

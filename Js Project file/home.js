@@ -10,7 +10,7 @@ window.addEventListener("scroll", () => {
 })
 // pagination
 function getPosts(page = 1) {
-  axios.get(`https://tarmeezacademy.com/api/v1/posts?limit=80&page=${page}`).then((info) => {
+  axios.get(`${baseUrl}/posts?limit=80&page=${page}`).then((info) => {
     lastPage = info.data.meta.last_page;
     let posts = info.data.data;
     let postTitle = "";
@@ -27,9 +27,11 @@ function getPosts(page = 1) {
       }
       let content = `<div class="card shadow rounded my-3">
             <div class="card-header">
+              <span onclick="userClicked(${response.author.id})" style="cursor:pointer;">
                 <img class="rounded-circle border border-3" src="${response.author.profile_image}" alt=""
                     style="height: 40px; width: 40px;">
                 <b>${response.author.username}</b>
+              </span>
                 ${editBtn}
             </div>
             <div class="card-body" style="cursor:pointer;" onclick="postClicked(${response.id})">
@@ -166,4 +168,6 @@ function addBtnClicked() {
   let PostModal = new bootstrap.Modal(document.getElementById("create-post-modal"),{});
   PostModal.toggle();
 }
-getPosts(1);
+function userClicked(id) {
+  location.href = `profile.html?userID=${id}`;
+}

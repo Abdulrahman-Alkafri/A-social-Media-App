@@ -169,7 +169,8 @@
                                         <a class="nav-link active" aria-current="page" href="index.html"">Home</a>
                                     </li>
                                     <li class=" nav-item">
-                                            <a class="nav-link" href="profile.html">Profile</a>
+                                            <a class="nav-link" onclick="userProfile()"
+                                                style="cursor: pointer;">Profile</a>
                                     </li>
                                 </ul>
                                 <div class="d-flex w-100 justify-content-end" id="logged-in">
@@ -198,34 +199,48 @@
             <div class="d-flex justify-content-center mt-5">
                 <div class="col-9">
                     <div class="card mb-4">
-                        <div class="card-body ">
-                            <div class="row container">
-                                <div class="col-2">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-2 col-6">
                                     <img id="image-header" src="download.png" class="rounded-circle border border-2"
                                         style="height: 120px; width: 120px;">
                                 </div>
-                                <div class="col-5 d-flex flex-column justify-content-evenly fw-bolder mx-2 mb-2">
-                                    <div>yarob</div>
-                                    <div>yarob99</div>
-                                    <div>123456789</div>
+                                <div id="main-info"
+                                    class="col-md-5 col-6 d-flex flex-column justify-content-between mx-2 mb-2">
+                                    <div id="email">yarob</div>
+                                    <div id="name">yarob99</div>
+                                    <div id="username">123456789</div>
                                 </div>
-                                <div class="col-3 d-flex flex-column justify-content-evenly fw-light mb-2">
-                                    <div style="color: #777;" class="fw-lighter"><span
+                                <div class="col-md-3 col-6 d-flex flex-column justify-content-between mb-2">
+                                    <div style="color: #777;"><span id="post-num"
                                             style="font-size: 30px;color: black;">0</span>
                                         Posts</div>
-                                    <div style="color: #777;" class="fw-lighter"><span
+                                    <div style="color: #777;"><span id="comment-num"
                                             style="font-size: 30px;color: black;">0</span>
-                                        Posts</div>
+                                        Comments</div>
                                 </div>
                             </div>
                         </div>
                     </div>
+
+                    <!-- Post Title -->
+                    <div class="row mt-5">
+                        <h1 id="post-title">yarob post</h1>
+                    </div>
+                    <!-- Post Title -->
+                    <!-- posts -->
+                    <div class="row" id="user-posts">
+
+                    </div>
+                    <!-- // posts // -->
                 </div>
             </div>
 
         </div>
         <!-- // MAIN CONTENT // -->
         <script src="./Js Project file/index.js"></script>
+        <script src="./Js Project file/home.js"></script>
+        <script src="./Js Project file/profile.js"></script>
     </body>
 
 </html>
