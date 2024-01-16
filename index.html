@@ -17,6 +17,7 @@
             crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
         <!-- // import  script and style // -->
+        <link rel="stylesheet" href="index.css">
         <style>
             #btn-back-to-top {
                 position: fixed;
@@ -25,10 +26,13 @@
                 display: none;
             }
         </style>
+
     </head>
 
     <body style="background-color: #f0ecff;">
-
+        <!-- this will fetch the data -->
+        <!-- this will show our spinner -->
+        <div hidden id="spinner"></div>
         <!-- modals -->
         <!-- login modal -->
         <div class="modal fade" id="login-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">

@@ -1,5 +1,7 @@
 let currentPage = 1
 let lastPage = null;
+const spinner = document.getElementById("spinner");
+
 // pagination
 window.addEventListener("scroll", () => {
   const endOfPage = innerHeight + scrollY >= document.body.offsetHeight;
@@ -10,6 +12,7 @@ window.addEventListener("scroll", () => {
 })
 // pagination
 function getPosts(page = 1) {
+   spinner.removeAttribute('hidden');
   axios.get(`${baseUrl}/posts?limit=80&page=${page}`).then((info) => {
     lastPage = info.data.meta.last_page;
     let posts = info.data.data;
@@ -63,7 +66,7 @@ function getPosts(page = 1) {
     `;
         document.getElementById(cuurentPostTag) += tagContent;
       }
-    }
+    }spinner.setAttribute('hidden', '');
     lastPage = info.data.meta.last_page;
   }).catch((error) => {
       const errorMessage = error.response.data.message;
@@ -125,6 +128,7 @@ function createNewPostClicked() {
 }
 // scroll to top button 
 function postClicked(id) {
+    
     location.href = `post.html?postId=${id}`;
 }
 function editPost(PostObject) {

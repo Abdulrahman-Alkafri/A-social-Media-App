@@ -3,21 +3,29 @@ function getCurrentUserID() {
   const id = urlParams.get("userID");
   return id;
 }
-
 function getUser() {
-  axios.get(`${baseUrl}/users/${getCurrentUserID()}`).then((response) => {
-    const user = response.data.data;
-    document.getElementById("image-header").src = user.profile_image;
-    document.getElementById("email").innerHTML = user.email;
-    document.getElementById("name").innerHTML = user.name;
-    document.getElementById("username").innerHTML = user.username;
-    document.getElementById("post-num").innerHTML = user.posts_count;
-    document.getElementById("comment-num").innerHTML = user.comments_count;
-    document.getElementById("post-title").innerHTML =
-      user.username + "'s Posts";
-  });
+  spinner.removeAttribute("hidden");
+  axios
+    .get(`${baseUrl}/users/${getCurrentUserID()}`)
+    .then((response) => {
+      const user = response.data.data;
+      document.getElementById("image-header").src = user.profile_image;
+      document.getElementById("email").innerHTML = user.email;
+      document.getElementById("name").innerHTML = user.name;
+      document.getElementById("username").innerHTML = user.username;
+      document.getElementById("post-num").innerHTML = user.posts_count;
+      document.getElementById("comment-num").innerHTML = user.comments_count;
+      document.getElementById("post-title").innerHTML =
+        user.username + "'s Posts";
+      spinner.setAttribute("hidden", "");
+    })
+    .catch((error) => {
+      const errorMessage = error.message;
+      showAlert(errorMessage, "danger");
+    });
 }
 function getPosts() {
+  spinner.removeAttribute("hidden");
   axios
     .get(`${baseUrl}/users/${getCurrentUserID()}/posts`)
     .then((info) => {
@@ -64,6 +72,7 @@ function getPosts() {
     </div>`;
         document.getElementById("user-posts").innerHTML += content;
       }
+      spinner.setAttribute("hidden", "");
     })
     .catch((error) => {
       const errorMessage = error.message;

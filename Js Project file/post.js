@@ -1,16 +1,20 @@
 const urlParams = new URLSearchParams(location.search);
 const id = urlParams.get("postId");
+const spinner = document.getElementById("spinner");
 function showPost(id) {
-  axios.get(`${baseUrl}/posts/${id}`).then((response) => {
-    const post = response.data.data;
-    const comments = post.comments;
-    const author = post.author;
-    let postTitle = "";
-    if (post.title != null) postTitle = post.title;
-    document.getElementById("username-span").innerHTML = author.username;
-    let comments_content = "";
-    for (let comment of comments) {
-      comments_content += ` 
+  spinner.removeAttribute("hidden");
+  axios
+    .get(`${baseUrl}/posts/${id}`)
+    .then((response) => {
+      const post = response.data.data;
+      const comments = post.comments;
+      const author = post.author;
+      let postTitle = "";
+      if (post.title != null) postTitle = post.title;
+      document.getElementById("username-span").innerHTML = author.username;
+      let comments_content = "";
+      for (let comment of comments) {
+        comments_content += ` 
       <div class="p-3" style ="background-color: rgb(199 212 255)">
             <div>
                 <img class="rounded-circle" style="width: 40px; height: 40px;" src="${comment.author.profile_image}" alt="">
@@ -19,8 +23,8 @@ function showPost(id) {
             <div>${comment.body}</div>
             </div>
             `;
-    }
-    let content = `<div class="card shadow rounded my-3">
+      }
+      let content = `<div class="card shadow rounded my-3">
             <div class="card-header">
                 <img class="rounded-circle border border-3" src="${author.profile_image}" alt=""
                     style="height: 40px; width: 40px;">
@@ -49,8 +53,13 @@ function showPost(id) {
             <button type="button" class="btn btn-outline-primary mx-1" onclick="createNewComment()">Add</button>
             </div>
     </div>`;
-    document.getElementById("post").innerHTML = content;
-  });
+      document.getElementById("post").innerHTML = content;
+      spinner.setAttribute("hidden", "");
+    })
+    .catch((error) => {
+      const errorMessage = error.response.data.message;
+      showAlert(errorMessage, "danger");
+    });
 }
 function createNewComment() {
   let commentField = document.getElementById("Comment-input").value;

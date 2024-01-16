@@ -108,8 +108,9 @@ function getCurrentUser() {
   }
   return user;
 }
-setUi();
 function userProfile() {
   let user = getCurrentUser();
   location.href = `profile.html?userID=${user.id}`;
 }
+
+setUi();
